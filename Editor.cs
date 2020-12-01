@@ -57,6 +57,8 @@ namespace armed
 
             //Attach handlers.
             editor.TextChanged += editorTextChanged;
+            editor.CharAdded += editorCharAdded;
+            editor.AutoCOrder = Order.PerformSort;
             
             //Save to editor list.
             tabs.TabPages[tabs.TabCount - 1].Controls.Add(editor);
@@ -66,6 +68,34 @@ namespace armed
         /////////////////////
         /// EDITOR EVENTS ///
         /////////////////////
+
+        //Triggered when a character is added to the editor.
+        private void editorCharAdded(object sender, EventArgs e)
+        {
+            //Get the active editor.
+            var editor = GetActiveEditor();
+
+            //Get current position, and start of word.
+            int currentPos = editor.CurrentPosition;
+            int wordStartPos = editor.WordStartPosition(currentPos, true);
+            int i = wordStartPos - 1;
+            if (i < 0) { i = 0; }
+
+            //Is the word at the start of a line?
+            while (editor.GetCharAt(i) == ' ' || editor.GetCharAt(i) == '\t') { i--; }
+            Console.WriteLine((char)editor.GetCharAt(i) + " == \\n");
+            if (editor.GetCharAt(i) != '\n' && i != 0)
+            {
+                return;
+            }
+
+            //Yes! Show the autocomplete.
+            int lenEntered = currentPos - wordStartPos;
+            if (lenEntered > 0 && !editor.AutoCActive)
+            {
+                editor.AutoCShow(lenEntered, Constants.Instructions);
+            }
+        }
 
         //Triggered when any editors have text changed on them.
         int maxCharWidth = -1;
