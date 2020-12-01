@@ -58,7 +58,9 @@ namespace armed
             //Attach handlers.
             editor.TextChanged += editorTextChanged;
             editor.CharAdded += editorCharAdded;
+            editor.StyleNeeded += editorStyleNeeded;
             editor.AutoCOrder = Order.PerformSort;
+            editor.Lexer = Lexer.Container;
             
             //Save to editor list.
             tabs.TabPages[tabs.TabCount - 1].Controls.Add(editor);
@@ -68,6 +70,14 @@ namespace armed
         /////////////////////
         /// EDITOR EVENTS ///
         /////////////////////
+        
+        //Triggered when the editor needs to be styled.
+        private void editorStyleNeeded(object sender, StyleNeededEventArgs e)
+        {
+            //Get active editor, call lexer.
+            var editor = GetActiveEditor();
+
+        }
 
         //Triggered when a character is added to the editor.
         private void editorCharAdded(object sender, EventArgs e)

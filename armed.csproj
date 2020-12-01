@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArmLexer.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Editor.cs">
       <SubType>Form</SubType>
