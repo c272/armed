@@ -93,7 +93,6 @@ namespace armed
 
             //Is the word at the start of a line?
             while (editor.GetCharAt(i) == ' ' || editor.GetCharAt(i) == '\t') { i--; }
-            Console.WriteLine((char)editor.GetCharAt(i) + " == \\n");
             if (editor.GetCharAt(i) != '\n' && i != 0)
             {
                 return;
