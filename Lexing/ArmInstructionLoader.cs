@@ -16,7 +16,7 @@ namespace armed
         /// Loads "instructions.alx" from the program's working directory into memory and
         /// returns it.
         /// </summary>
-        public static Dictionary<string, List<Operand>> Load()
+        public static Dictionary<string, ArmInstruction> Load()
         {
             //Does the file exist?
             string filename = "instructions.alx";
@@ -27,7 +27,7 @@ namespace armed
 
             //Load the file.
             string[] instructions = File.ReadAllLines(filename);
-            var parsed = new Dictionary<string, List<Operand>>();
+            var parsed = new Dictionary<string, ArmInstruction>();
             for (int i=0; i<instructions.Length; i++)
             {
                 //If it's a blank or comment line, ignore.
@@ -36,6 +36,21 @@ namespace armed
 
                 //Get the name of the instruction.
                 string instrName = line.Split(' ').FirstOrDefault();
+
+                //Check whether it supports cond codes or not (suffix [cond] and [s]).
+                bool allowsCond = false, allowsFlagSet = false;
+                if (instrName.EndsWith("[cond]"))
+                {
+                    allowsCond = true;
+                    instrName = instrName.Substring(0, instrName.Length - "[cond]".Length);
+                }
+                if (instrName.EndsWith("[s]"))
+                {
+                    allowsFlagSet = true;
+                    instrName = instrName.Substring(0, instrName.Length - "[s]".Length);
+                }
+
+                //Check the instruction isn't a duplicate.
                 if (parsed.ContainsKey(instrName))
                 {
                     throw new Exception("Duplicate instruction with name '" + instrName + "' in instruction lexer file.");
@@ -58,7 +73,7 @@ namespace armed
                         case "imm":
                             parsedOps.Add(Operand.Immediate);
                             break;
-                        case "reg/imm":
+                        case "r/i":
                             parsedOps.Add(Operand.RegOrImmediate);
                             break;
                         case "op2":
@@ -70,7 +85,12 @@ namespace armed
                 }
 
                 //Add to dictionary.
-                parsed.Add(instrName, parsedOps);
+                parsed.Add(instrName, new ArmInstruction()
+                {
+                    Operands = parsedOps,
+                    AllowsFlagSet = allowsFlagSet,
+                    AllowsCondCode = allowsCond
+                });
             }
 
             //Return the list of instructions.

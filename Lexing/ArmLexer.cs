@@ -89,16 +89,39 @@ namespace armed
 
             //Not a label, so must be assembly instruction. Valid instruction?
             string instr = line.Split(' ').FirstOrDefault();
-            List<Operand> ops = GetInstructionOperands(instr);
-            if (ops == null)
+            string curInstr = instr;
+            ArmInstruction instrInfo = GetInstruction(instr);
+            bool condUsed = false, flagSetUsed = false;
+
+            //If instruction ends with a cond code, retry without the cond code.
+            if (instrInfo == null && instr.Length > 2 && Regex.IsMatch(instr.ToLower(), "^.+(eq|ne|cs|hs|cc|lo|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al)$"))
+            {
+                curInstr = instr.Substring(0, instr.Length - 2);
+                instrInfo = GetInstruction(curInstr);
+                condUsed = true;
+            }
+
+            //If *still* null and ends in S (for set condition), try again.
+            if (instrInfo == null && curInstr.Length > 1 && curInstr.EndsWith("s"))
+            {
+                instrInfo = GetInstruction(curInstr.Substring(0, curInstr.Length - 1));
+                flagSetUsed = true;
+            }
+            
+            //Check if the loaded instruction actually supports cond codes/flag set (if used).
+            bool validCodes = (condUsed && !instrInfo.AllowsCondCode) || (flagSetUsed && !instrInfo.AllowsFlagSet);
+
+            //Still null or invalid codes? Error out.
+            if (instrInfo == null || validCodes)
             {
                 //Invalid instruction, underline red. (skip starting spaces)
                 int errorStartPos = lineStartPos;
                 while (editor.GetCharAt(errorStartPos) == ' ' || editor.GetCharAt(errorStartPos) == '\t') { errorStartPos++; }
+                editor.SetStyling(line.Length, StyleDefault);
                 editor.IndicatorFillRange(errorStartPos, line.Length - (errorStartPos - lineStartPos));
                 return;
             }
-
+            
             //Valid instruction, style name and continue.
             editor.SetStyling(instr.Length, StyleKeyword);
 
@@ -113,7 +136,7 @@ namespace armed
         /// <summary>
         /// Gets the list of operands associated with a specific instruction.
         /// </summary>
-        private static List<Operand> GetInstructionOperands(string instr)
+        private static ArmInstruction GetInstruction(string instr)
         {
             //Return by checking the operation dictionary.
             if (!Constants.Instructions.ContainsKey(instr)) { return null; }

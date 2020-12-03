@@ -24,7 +24,7 @@ namespace armed
         /// <summary>
         /// All base ARM instruction mnemonics available in ARM.
         /// </summary>
-        public static Dictionary<string, List<Operand>> Instructions = null;
+        public static Dictionary<string, ArmInstruction> Instructions = null;
 
         /// <summary>
         /// The autocomplete string for all loaded ARM instructions.
