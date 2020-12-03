@@ -19,11 +19,15 @@ namespace armed
         {
             InitializeComponent();
 
+            //Load the instruction lexer file.
+            Constants.Instructions = ArmInstructionLoader.Load();
+
+            //Set up instruction auto complete.
+            Constants.InstructionAutoCString = string.Join(" ", Constants.Instructions.Keys.ToList());
+
             //Set up the tabs, initialize Scintilla instance.
             tabs.TabPages.Clear();
             CreateNewTab();
-
-            //
         }
 
         /// <summary>
@@ -115,7 +119,7 @@ namespace armed
             int lenEntered = currentPos - wordStartPos;
             if (lenEntered > 0 && !editor.AutoCActive)
             {
-                editor.AutoCShow(lenEntered, Constants.Instructions);
+                editor.AutoCShow(lenEntered, Constants.InstructionAutoCString);
             }
         }
 

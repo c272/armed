@@ -88,7 +88,8 @@ namespace armed
             }
 
             //Not a label, so must be assembly instruction. Valid instruction?
-            List<Operand> ops = GetInstructionOperands(line.Split(' ').FirstOrDefault());
+            string instr = line.Split(' ').FirstOrDefault();
+            List<Operand> ops = GetInstructionOperands(instr);
             if (ops == null)
             {
                 //Invalid instruction, underline red. (skip starting spaces)
@@ -98,16 +99,25 @@ namespace armed
                 return;
             }
 
-            //Valid instruction, process ops one by one!
-            //...
+            //Valid instruction, style name and continue.
+            editor.SetStyling(instr.Length, StyleKeyword);
+
+            string opString = string.Join(" ", line.Split(' ').Skip(1));
+            string[] opArr = opString.Replace("\t", "").Replace(" ", "").Split(',');
+            for (int i=0; i<opArr.Length; i++)
+            {
+
+            }
         }
 
         /// <summary>
         /// Gets the list of operands associated with a specific instruction.
         /// </summary>
-        private static List<Operand> GetInstructionOperands(string v)
+        private static List<Operand> GetInstructionOperands(string instr)
         {
-            return null;
+            //Return by checking the operation dictionary.
+            if (!Constants.Instructions.ContainsKey(instr)) { return null; }
+            return Constants.Instructions[instr];
         }
 
         /// <summary>
