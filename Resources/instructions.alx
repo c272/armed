@@ -1,68 +1,113 @@
-﻿//branch instructions
-b
-bl
-blx
-bx
-bxj
+﻿//ARMv7 Instruction Set (abbreviated)
+//by C272 03/12/2020
+//*only completed up to page 679 of spec :(
+
+//branch instructions
+b[c] lbl
+bl[c] lbl
+blx[c] lbl/reg
+bx[c] reg
+bxj[c] reg
 
 //general data processing
-adc
-add
-bic
-cmn
-cmp
-eor
-mov
-mvn
-orn
-orr
-rsb
-rsc
-sbc
+adc[s][c] reg, reg, imm/reg
+add[s][c] reg, reg/sp, imm/reg
+adr[c] reg, lbl
+and[s][c] reg, reg, imm/reg
+bic[s][c] reg, reg, imm/reg
+cmn[c] reg, imm/reg
+cmp[c] reg, imm/reg
+eor[s][c] reg, reg, imm/reg
+mov[s][c] reg, imm/reg
+movt[c] reg, imm
+mvn[s][c] reg, imm/reg
+orn[s][c] reg, reg, imm/reg
+orr[s][c] reg, reg, imm/reg
+rbit[c] reg, reg
+rev[c] reg, reg
+rev16[c] reg, reg
+revsh[c] reg, reg
+rsb[s][c] reg, reg, imm/reg
+rsc[s][c] reg, reg, imm/reg
+sadd16[c] reg, reg, reg
+sadd8[c] reg, reg, reg
+sasx[c] reg, reg, reg
+sbc[s][c] reg, reg, imm/reg
+sbfx[c] reg, reg, imm, imm
+sdiv[c] reg, reg, reg
+sel[c] reg, reg, reg
+setend end
+shadd16[c] reg, reg, reg
+shadd8[c] reg, reg, reg
+shasx[c] reg, reg, reg
+shsax[c] reg, reg, reg
+shsub[c] reg, reg, reg
+shsub8[c] reg, reg, reg
 sub
 teq
 tst
 
+//memory
+ldr[c] reg, reg/imm/lbl
+ldrb[c] reg, reg/imm/lbl
+ldrbt[c] reg, reg, reg/imm
+ldrd[c] reg, reg, reg/imm/lbl
+ldrex[c] reg, reg
+ldrexb[c] reg, reg
+ldrexd[c] reg, reg, reg
+ldrexh[c] reg, reg
+ldrh[c] reg, reg/lbl, imm?
+pld[c] reg/lbl, imm?
+pli reg/lbl, imm/reg?
+pldw[c] reg/lbl, imm?
+str[c] reg, imm/reg, reg?
+
+//stack
+pop[c] reg, reg?, reg?, reg?
+push[c] reg, reg?, reg?, reg?
+
 //shift
-asr
+asr[s][c] reg, reg, imm/reg
 lsl
 lsr
-ror
-rrx
+pkhbt[c] reg, reg, reg
+pkhtb[c] reg, reg, reg
+ror[s][c] reg, reg, imm/reg
+rrx[s][c] reg, reg
 
 //general multiply
-mul
-mls
-mla
+mul[s][c] reg, reg, reg
+mls[c] reg, reg, reg, reg
+mla[c] reg, reg, reg, reg
 
 //signed multiply
-smlabb
-smlabt
-smlatb
-smlatt
-smlad
-smlal
-smlalbb
-smlalbt
-smlaltb
-smlaltt
-smlald
-smlawb
-smlawt
-smlsd
-smlsld
-smmla
-smmls
-smmul
-smuad
-smulbb
-smulbt
-smultb
-smultt
-smull
-smulwb
-smulwt
-smusd
+smlabb[c] reg, reg, reg, reg
+smlabt[c] reg, reg, reg, reg
+smlatb[c] reg, reg, reg, reg
+smlatt[c] reg, reg, reg, reg
+smlad[c] reg, reg, reg, reg
+smlal[c] reg, reg, reg, reg
+smlalbb[c] reg, reg, reg, reg
+smlalbt[c] reg, reg, reg, reg
+smlaltb[c] reg, reg, reg, reg
+smlaltt[c] reg, reg, reg, reg
+smlald[c] reg, reg, reg, reg
+smlawb[c] reg, reg, reg, reg
+smlawt[c] reg, reg, reg, reg
+smlsd[c] reg, reg, reg, reg
+smlsld[c] reg, reg, reg, reg
+smmla[c] reg, reg, reg, reg
+smmls[c] reg, reg, reg, reg
+smmul[c] reg, reg, reg
+smuad[c] reg, reg, reg
+smulbb[c] reg, reg, reg
+smulbt[c] reg, reg, reg
+smultb[c] reg, reg, reg
+smultt[c] reg, reg, reg
+smull[s][c] reg, reg, reg, reg
+smulwb[c] reg, reg, reg
+smulwt[c] reg, reg, reg
+smusd[c] reg, reg, reg
 
 //unsigned multiply
 umaal
@@ -70,14 +115,23 @@ umlal
 umull
 
 //saturating
-ssat
-ssat16
+ssat[c] reg, imm, reg
+ssat16[c] reg, imm, reg
+ssax[c] reg, reg, reg
+ssub16[c] reg, reg, reg
+ssub8[c] reg, reg, reg
 usat
 usat16
-qadd
-qsub
-qdadd
-qdsub
+qadd[c] reg, reg, reg
+qadd16[c] reg, reg, reg
+qadd8[c] reg, reg, reg
+qasx[c] reg, reg, reg
+qdadd[c] reg, reg, reg
+qdsub[c] reg, reg, reg
+qsax[c] reg, reg, reg
+qsub[c] reg, reg, reg
+qsub16[c] reg, reg, reg
+qsub8[c] reg, reg, reg
 
 //packing and unpacking
 pkh
@@ -95,16 +149,21 @@ uxtb16
 uxth
 
 //misc dpi
-bfc
-bfi
-clz
-movt
-rbit
-rev
-rev16
-revsh
-sbfx
-sel
+bfc[c] reg, imm, imm
+bfi[c] reg, reg, imm, imm
+clz[c] reg, reg
 ubfx
 usad8
 usada8
+
+//misc weirdness
+nop[c]
+bkpt imm
+csdb[c]
+dbg[c]
+clrex
+dmb dxb
+dsb dxb
+isb
+ldc[c] imm, reg, imm/reg/lbl
+sev[c]

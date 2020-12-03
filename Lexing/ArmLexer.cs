@@ -107,9 +107,13 @@ namespace armed
                 instrInfo = GetInstruction(curInstr.Substring(0, curInstr.Length - 1));
                 flagSetUsed = true;
             }
-            
+
             //Check if the loaded instruction actually supports cond codes/flag set (if used).
-            bool validCodes = (condUsed && !instrInfo.AllowsCondCode) || (flagSetUsed && !instrInfo.AllowsFlagSet);
+            bool validCodes = true;
+            if (instrInfo != null)
+            {
+                validCodes = (condUsed && !instrInfo.AllowsCondCode) || (flagSetUsed && !instrInfo.AllowsFlagSet);
+            }
 
             //Still null or invalid codes? Error out.
             if (instrInfo == null || validCodes)
@@ -157,13 +161,5 @@ namespace armed
 
             return startPos + pos;
         }
-    }
-
-    public enum Operand
-    { 
-        Immediate,
-        Register,
-        RegOrImmediate,
-        Operand2,
     }
 }

@@ -35,14 +35,15 @@ namespace armed
                 if (line.StartsWith("//") || line.Replace(" ", "") == "") { continue; }
 
                 //Get the name of the instruction.
-                string instrName = line.Split(' ').FirstOrDefault();
+                string instrName = line.Replace("\t", " ").Split(' ').FirstOrDefault();
+                int instrNameLen = instrName.Length;
 
                 //Check whether it supports cond codes or not (suffix [cond] and [s]).
                 bool allowsCond = false, allowsFlagSet = false;
-                if (instrName.EndsWith("[cond]"))
+                if (instrName.EndsWith("[c]"))
                 {
                     allowsCond = true;
-                    instrName = instrName.Substring(0, instrName.Length - "[cond]".Length);
+                    instrName = instrName.Substring(0, instrName.Length - "[c]".Length);
                 }
                 if (instrName.EndsWith("[s]"))
                 {
@@ -57,37 +58,65 @@ namespace armed
                 }
 
                 //Parse operands out.
-                string[] ops = line.Substring(instrName.Length).Replace(" ", "").Split(',');
+                string[] ops = line.Substring(instrNameLen).Replace(" ", "").Split(',');
                 var parsedOps = new List<Operand>();
+                var optionalOps = new List<bool>();
                 for (int j=0; j<ops.Length; j++)
                 {
                     //Ignore blank.
                     if (ops[j] == "") { continue; }
+                    Operand thisOp = Operand.None;
 
-                    //Switch on operand.
-                    switch (ops[j])
+                    //Optional property?
+                    bool optional = ops[j].EndsWith("?");
+                    if (optional)
                     {
-                        case "reg":
-                            parsedOps.Add(Operand.Register);
-                            break;
-                        case "imm":
-                            parsedOps.Add(Operand.Immediate);
-                            break;
-                        case "r/i":
-                            parsedOps.Add(Operand.RegOrImmediate);
-                            break;
-                        case "op2":
-                            parsedOps.Add(Operand.Operand2);
-                            break;
-                        default:
-                            throw new Exception("Unrecognized operand '" + ops[j] + "' on line " + (i + 1) + " of instruction lexer file.");
+                        ops[j] = ops[j].Substring(0, ops[j].Length - 1);
                     }
+
+                    //Loop over possibilities.
+                    string[] subOps = ops[j].Split('/');
+                    for (int k = 0; k < subOps.Length; k++) 
+                    {
+                        //Switch on operand.
+                        switch (subOps[k])
+                        {
+                            case "reg":
+                                thisOp |= Operand.Register;
+                                break;
+                            case "imm":
+                                thisOp |= Operand.Immediate;
+                                break;
+                            case "lbl":
+                                thisOp |= Operand.Label;
+                                break;
+                            case "op2":
+                                thisOp |= Operand.Operand2;
+                                break;
+                            case "sp":
+                                thisOp |= Operand.StackPointer;
+                                break;
+                            case "dxb":
+                                thisOp |= Operand.DataXBarrier;
+                                break;
+                            case "end":
+                                thisOp |= Operand.EndianSpecifier;
+                                break;
+                            default:
+                                throw new Exception("Unrecognized operand '" + subOps[k] + "' on line " + (i + 1) + " of instruction lexer file.");
+                        }
+                    }
+
+                    //Add op.
+                    parsedOps.Add(thisOp);
+                    optionalOps.Add(optional);
                 }
 
                 //Add to dictionary.
                 parsed.Add(instrName, new ArmInstruction()
                 {
                     Operands = parsedOps,
+                    OperandOptional = optionalOps,
                     AllowsFlagSet = allowsFlagSet,
                     AllowsCondCode = allowsCond
                 });

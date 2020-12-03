@@ -19,5 +19,23 @@ namespace armed
 
         //The operands for this instruction.
         public List<Operand> Operands = new List<Operand>();
+
+        //Whether the corresponding operand is optional or not.
+        public List<bool> OperandOptional = new List<bool>();
+    }
+
+    /// <summary>
+    /// Represents a single operand in an instruction.
+    /// </summary>
+    public enum Operand
+    {
+        None = 0b_0000_0000,
+        Immediate = 0b_0000_0001,
+        Register = 0b_0000_0010,
+        Label = 0b_0000_0100,
+        Operand2 = 0b_0000_1000,
+        StackPointer = 0b_0001_0000,
+        DataXBarrier = 0b_0010_0000, //see p379 of ARMv7 reference
+        EndianSpecifier = 0b_0010_0000 //see p606 of ARMv7 reference
     }
 }
