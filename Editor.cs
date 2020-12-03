@@ -61,7 +61,20 @@ namespace armed
             editor.StyleNeeded += editorStyleNeeded;
             editor.AutoCOrder = Order.PerformSort;
             editor.Lexer = Lexer.Container;
-            
+
+            //Set up editor syntax highlighting.
+            editor.StyleClearAll();
+            editor.Styles[ArmLexer.StyleDefault].ForeColor = Color.Black;
+            editor.Styles[ArmLexer.StyleKeyword].ForeColor = Color.Blue;
+            editor.Styles[ArmLexer.StyleHex].ForeColor = Color.Teal;
+            editor.Styles[ArmLexer.StyleNum].ForeColor = Color.Purple;
+            editor.Styles[ArmLexer.StyleComment].ForeColor = Color.Gray;
+            editor.Styles[ArmLexer.StyleLabel].ForeColor = Color.Gray;
+
+            //Set up indicators (error highlights, etc.)
+            editor.Indicators[ArmLexer.IndicatorError].Style = IndicatorStyle.Squiggle;
+            editor.Indicators[ArmLexer.IndicatorError].ForeColor = Color.Red;
+
             //Save to editor list.
             tabs.TabPages[tabs.TabCount - 1].Controls.Add(editor);
             editors.Add(editor);
@@ -76,7 +89,7 @@ namespace armed
         {
             //Get active editor, call lexer.
             var editor = GetActiveEditor();
-
+            ArmLexer.Style(editor, editor.GetEndStyled(), e.Position);
         }
 
         //Triggered when a character is added to the editor.
