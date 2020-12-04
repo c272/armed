@@ -57,7 +57,7 @@ namespace armed
         public static void ProcessLine(Scintilla editor, int startPos, string[] lines, int index)
         {
             //Start styling at this line. Disregard starting spaces/tabs.
-            string line = string.Join("", lines[index].SkipWhile(x => x == ' ' || x == '\t')); //.TrimEnd('\r');
+            string line = string.Join("", lines[index].SkipWhile(x => x == ' ' || x == '\t'));
             int lineStartPos = GetLineStart(lines, startPos, index) + (lines[index].Length - line.Length);
             editor.StartStyling(lineStartPos);
 
