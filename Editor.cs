@@ -70,10 +70,11 @@ namespace armed
             editor.StyleClearAll();
             editor.Styles[ArmLexer.StyleDefault].ForeColor = Color.Black;
             editor.Styles[ArmLexer.StyleKeyword].ForeColor = Color.Blue;
-            editor.Styles[ArmLexer.StyleHex].ForeColor = Color.Teal;
-            editor.Styles[ArmLexer.StyleNum].ForeColor = Color.Purple;
+            editor.Styles[ArmLexer.StyleImmediate].ForeColor = Color.LightSeaGreen;
             editor.Styles[ArmLexer.StyleComment].ForeColor = Color.Gray;
             editor.Styles[ArmLexer.StyleLabel].ForeColor = Color.Gray;
+            editor.Styles[ArmLexer.StyleRegister].ForeColor = Color.LightSkyBlue;
+            editor.Styles[ArmLexer.StyleSpecial].ForeColor = Color.Magenta;
 
             //Set up indicators (error highlights, etc.)
             editor.Indicators[ArmLexer.IndicatorError].Style = IndicatorStyle.Squiggle;
