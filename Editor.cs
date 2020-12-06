@@ -13,6 +13,7 @@ namespace armed
 {
     public partial class Editor : Form
     {
+        //List of currently open editors.
         private List<Scintilla> editors = new List<Scintilla>();
 
         public Editor()
@@ -152,6 +153,35 @@ namespace armed
         {
             CreateNewTab();
             tabs.SelectedIndex = tabs.TabCount - 1;
+        }
+
+        /////////////////////
+        /// WINDOW EVENTS ///
+        /////////////////////
+        
+        /// <summary>
+        /// Processes non-standard shortcut keys for the editor.
+        /// </summary>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            var editor = GetActiveEditor();
+            if (editor == null) { return base.ProcessCmdKey(ref msg, keyData); }
+
+            //CTRL and +
+            if (keyData == (Keys.Control | Keys.Oemplus))
+            {
+                //Zoom active editor (if not null).
+                editor.ZoomIn();
+                return true;
+            }
+            //CTRL and -
+            else if (keyData == (Keys.Control | Keys.OemMinus))
+            {
+                //Zoom out.
+                editor.ZoomOut();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }
