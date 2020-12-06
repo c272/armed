@@ -60,7 +60,7 @@
             this.redoButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1058, 31);
+            this.toolStrip1.Size = new System.Drawing.Size(1058, 27);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -70,8 +70,9 @@
             this.newBtn.Image = ((System.Drawing.Image)(resources.GetObject("newBtn.Image")));
             this.newBtn.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.newBtn.Name = "newBtn";
-            this.newBtn.Size = new System.Drawing.Size(29, 28);
+            this.newBtn.Size = new System.Drawing.Size(29, 24);
             this.newBtn.Text = "New";
+            this.newBtn.ToolTipText = "New (CTRL+N)";
             this.newBtn.Click += new System.EventHandler(this.newBtn_Click);
             // 
             // openButton
@@ -82,6 +83,7 @@
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(29, 24);
             this.openButton.Text = "Open";
+            this.openButton.ToolTipText = "Open (CTRL+O)";
             // 
             // saveButton
             // 
@@ -91,6 +93,8 @@
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(29, 24);
             this.saveButton.Text = "Save";
+            this.saveButton.ToolTipText = "Save (CTRL+S)";
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // saveAllButton
             // 
@@ -100,6 +104,7 @@
             this.saveAllButton.Name = "saveAllButton";
             this.saveAllButton.Size = new System.Drawing.Size(29, 24);
             this.saveAllButton.Text = "Save All";
+            this.saveAllButton.Click += new System.EventHandler(this.saveAllButton_Click);
             // 
             // saveAsButton
             // 
@@ -109,6 +114,7 @@
             this.saveAsButton.Name = "saveAsButton";
             this.saveAsButton.Size = new System.Drawing.Size(29, 24);
             this.saveAsButton.Text = "Save As";
+            this.saveAsButton.Click += new System.EventHandler(this.saveAsButton_Click);
             // 
             // toolStripSeparator1
             // 
@@ -123,6 +129,7 @@
             this.undoButton.Name = "undoButton";
             this.undoButton.Size = new System.Drawing.Size(29, 24);
             this.undoButton.Text = "Undo";
+            this.undoButton.ToolTipText = "Undo (CTRL+Z)";
             // 
             // redoButton
             // 
@@ -132,6 +139,7 @@
             this.redoButton.Name = "redoButton";
             this.redoButton.Size = new System.Drawing.Size(29, 24);
             this.redoButton.Text = "Redo";
+            this.redoButton.ToolTipText = "Redo (CTRL+Y)";
             // 
             // tabs
             // 

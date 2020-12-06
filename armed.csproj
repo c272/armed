@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EditorData.cs" />
     <Compile Include="Lexing\ArmInstruction.cs" />
     <Compile Include="Lexing\ArmInstructionLoader.cs" />
     <Compile Include="Lexing\ArmLexer.cs" />

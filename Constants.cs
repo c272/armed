@@ -14,7 +14,7 @@ namespace armed
         /// <summary>
         /// The name of a tab when the new file button is pressed.
         /// </summary>
-        public static string NewFileName { get; set; } = "newFile.asm";
+        public static string NewFileName { get; set; } = "Untitled";
 
         /// <summary>
         /// The amount of right-padding given to the line number margin.
